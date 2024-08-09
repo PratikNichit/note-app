@@ -10,26 +10,23 @@ import {
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { blue, green, pink, yellow } from "@mui/material/colors";
-const NoteCard = ({ data, onDelete }) => {
-  const applyBackgroundColor = (data) => {
-    if (data.category === "work") {
-      return yellow[700];
-    }
-    if (data.category === "money") {
-      return green[500];
-    }
-    if (data.category === "todos") {
-      return pink[500];
-    }
 
-    return blue[500];
+const NoteCard = ({ data, onDelete }) => {
+  const applyBackgroundColor = (category) => {
+    const categoryColors = {
+      work: yellow[700],
+      money: green[500],
+      todos: pink[500],
+    };
+
+    return categoryColors[category] || blue[500];
   };
 
   return (
     <Card elevation={2}>
       <CardHeader
         avatar={
-          <Avatar sx={{ backgroundColor: applyBackgroundColor(data) }}>
+          <Avatar sx={{ backgroundColor: applyBackgroundColor(data.category) }}>
             {data.category[0].toUpperCase()}
           </Avatar>
         }

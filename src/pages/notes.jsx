@@ -1,4 +1,3 @@
-import { Container, Grid, Paper } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import NoteCard from "../components/noteCard";
 import Masonry from "react-masonry-css";
