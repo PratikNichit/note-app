@@ -27,7 +27,7 @@ const Notes = () => {
     if (!response.ok) {
       throw new Error("Failed to delete note");
     }
-    const newNotes = notes.filter((note) => note.id != id);
+    const newNotes = notes.filter((note) => note.id !== id);
     setNotes(newNotes);
   };
 
