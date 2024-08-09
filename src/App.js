@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import Notes from "./pages/notes";
+import Create from "./pages/create";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { purple } from "@mui/material/colors";
+const customeTheam = createTheme({
+  palette: {
+    primary: purple,
+  },
+  typography: {
+    fontFamily: "Quicksand",
+  },
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={customeTheam}>
+      <Routes>
+        <Route path="/" element={<Notes />} />
+        <Route path="/create" element={<Create />} />
+      </Routes>
+    </ThemeProvider>
   );
 }
 
