@@ -31,7 +31,7 @@ const Notes = () => {
   };
 
   return (
-    <Container>
+    <>
       {error && <p>Error: {error}</p>}
       <Grid container spacing={3}>
         {notes.map((note) => (
@@ -40,7 +40,7 @@ const Notes = () => {
           </Grid>
         ))}
       </Grid>
-    </Container>
+    </>
   );
 };
 

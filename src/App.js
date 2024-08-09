@@ -4,7 +4,9 @@ import Notes from "./pages/notes";
 import Create from "./pages/create";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { purple } from "@mui/material/colors";
-const customeTheam = createTheme({
+import Layout from "./components/layout";
+
+const customTheme = createTheme({
   palette: {
     primary: purple,
   },
@@ -15,11 +17,13 @@ const customeTheam = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={customeTheam}>
-      <Routes>
-        <Route path="/" element={<Notes />} />
-        <Route path="/create" element={<Create />} />
-      </Routes>
+    <ThemeProvider theme={customTheme}>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Notes />} />
+          <Route path="/create" element={<Create />} />
+        </Routes>
+      </Layout>
     </ThemeProvider>
   );
 }
