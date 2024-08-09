@@ -5,8 +5,8 @@ import { format } from "date-fns";
 const AppBarComponent = ({ onProfileClick }) => {
   return (
     <AppBar
-      position="fixed"
       sx={{
+        width: `calc(100% - ${240}px)`,
         zIndex: (theme) => theme.zIndex.drawer + 1,
         backgroundColor: "#ffffff",
         color: "#000000",

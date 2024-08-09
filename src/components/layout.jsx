@@ -1,7 +1,7 @@
 // src/components/Layout.js
 import React from "react";
 import { Box } from "@mui/material";
-import AppBarComponent from "./AppBarComponent";
+import AppBarComponent from "./appBarComponent";
 import DrawerComponent from "./DrawerComponent";
 import { useNavigate } from "react-router-dom";
 import { AddCircleOutlineOutlined, SubjectOutlined } from "@mui/icons-material";
@@ -26,9 +26,7 @@ const Layout = ({ children }) => {
   return (
     <Box sx={{ display: "flex" }}>
       <AppBarComponent onProfileClick={() => console.log("Profile clicked")} />
-
       <DrawerComponent menuItems={menuItems} onNavigate={navigate} />
-
       <Box
         sx={{
           background: "#f9f9f9",
