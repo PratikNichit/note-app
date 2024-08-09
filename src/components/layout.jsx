@@ -1,7 +1,7 @@
 // src/components/Layout.js
 import React from "react";
 import { Box } from "@mui/material";
-import AppBarComponent from "./appBarComponent";
+import AppBarComponent from "./AppBarComponent";
 import DrawerComponent from "./DrawerComponent";
 import { useNavigate } from "react-router-dom";
 import { AddCircleOutlineOutlined, SubjectOutlined } from "@mui/icons-material";
