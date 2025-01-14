@@ -1,6 +1,5 @@
 import {
   Button,
-  Container,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -8,12 +7,15 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  useMediaQuery,
+  useTheme,
+  Box,
 } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebaseConfig"; // Import the Firestore instance
-import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
+import { db } from "../firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
 
 const Create = () => {
   const [title, setTitle] = useState("");
@@ -23,32 +25,39 @@ const Create = () => {
   const [category, setCategory] = useState("to do list");
   const navigate = useNavigate();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const navigateToNote = () => {
     navigate("/");
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setTitleError(false);
+    setDetailsError(false);
 
-    // Validate form inputs
-    setTitleError(title === "");
-    setDetailsError(details === "");
+    const trimmedTitle = title.trim();
+    const trimmedDetails = details.trim();
 
-    if (title !== "" && details !== "") {
+    if (trimmedTitle === "") {
+      setTitleError(true);
+    }
+    if (trimmedDetails === "") {
+      setDetailsError(true);
+    }
+
+    if (trimmedTitle && trimmedDetails) {
       try {
-        // Add the note to Firestore
-        const docRef = await addDoc(collection(db, "note"), {
-          title,
-          noteDetails: details,
+        await addDoc(collection(db, "notes"), {
+          title: trimmedTitle,
+          details: trimmedDetails,
           category,
+          createdAt: new Date().toISOString(), // Add timestamp for better tracking
         });
-
-        console.log("Document written with ID: ", docRef.id);
-
-        // Navigate to the notes page after successful addition
         navigateToNote();
       } catch (error) {
-        console.error("Error adding document: ", error);
+        console.error("Error adding document: ", error.message);
       }
     }
   };
@@ -65,7 +74,7 @@ const Create = () => {
   };
 
   return (
-    <Container>
+    <Box maxWidth={isMobile ? "sm" : "md"} sx={{display: "flex", flexDirection: "column", margin: "auto"}}>
       <Typography
         variant="h6"
         color="textSecondary"
@@ -81,7 +90,9 @@ const Create = () => {
           fullWidth
           required
           error={titleError}
+          helperText={titleError ? "Title cannot be empty" : ""}
           onChange={(event) => setTitle(event.target.value)}
+          value={title}
           sx={customStyle.field}
         />
         <TextField
@@ -90,15 +101,17 @@ const Create = () => {
           fullWidth
           required
           multiline
+          rows={4}
           error={detailsError}
+          helperText={detailsError ? "Details cannot be empty" : ""}
           onChange={(event) => setDetails(event.target.value)}
-          rows={5}
+          value={details}
           sx={customStyle.field}
         />
         <FormControl sx={customStyle.field}>
-          <FormLabel>Notes Category</FormLabel>
+          <FormLabel>Note Category</FormLabel>
           <RadioGroup
-            defaultValue={category}
+            value={category}
             onChange={(event) => setCategory(event.target.value)}
           >
             <FormControlLabel
@@ -112,24 +125,28 @@ const Create = () => {
               label="Reminders"
             />
             <FormControlLabel
-              value="money"
+              value="work"
               control={<Radio />}
-              label="Money"
+              label="Work"
             />
-            <FormControlLabel value="work" control={<Radio />} label="Work" />
+            <FormControlLabel
+              value="personal"
+              control={<Radio />}
+              label="Personal"
+            />
           </RadioGroup>
         </FormControl>
         <Button
           type="submit"
-          variant="contained"
           color="primary"
-          endIcon={<ArrowForwardIosIcon fontSize="small" />}
+          variant="contained"
+          endIcon={<ArrowForwardIosIcon />}
           sx={customStyle.submitButton}
         >
           Submit
         </Button>
       </form>
-    </Container>
+    </Box>
   );
 };
 

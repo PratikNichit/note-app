@@ -1,4 +1,4 @@
-// src/components/DrawerComponent.js
+// DrawerComponent.jsx
 import {
   Drawer,
   Typography,
@@ -10,28 +10,20 @@ import {
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
-const drawerWidth = 240;
-
-const DrawerComponent = ({ menuItems, onNavigate }) => {
+const DrawerComponent = ({ 
+  menuItems, 
+  onNavigate, 
+  drawerWidth, 
+  mobileOpen, 
+  onDrawerToggle,
+  isMobile 
+}) => {
   const location = useLocation();
 
-  const customStyle = {
-    drawer: {
-      width: drawerWidth,
-      "& .MuiDrawer-paper": {
-        width: drawerWidth,
-        boxSizing: "border-box",
-      },
-    },
-    active: {
-      background: "#f4f4f4",
-    },
-  };
-
-  return (
-    <Drawer sx={customStyle.drawer} variant="permanent" anchor="left">
-      <Box>
-        <Typography variant="h5" sx={{ padding: "12px" }}>
+  const drawerContent = (
+    <>
+      <Box sx={{ p: 2, height: 64, display: 'flex', alignItems: 'center' }}>
+        <Typography variant="h5">
           Sticky Notes
         </Typography>
       </Box>
@@ -40,14 +32,64 @@ const DrawerComponent = ({ menuItems, onNavigate }) => {
           <ListItemButton
             onClick={() => onNavigate(item.path)}
             key={item.text}
-            sx={location.pathname === item.path ? customStyle.active : null}
+            sx={{
+              backgroundColor: location.pathname === item.path ? "#f4f4f4" : null,
+              '&:hover': {
+                backgroundColor: location.pathname === item.path ? "#f4f4f4" : null,
+              }
+            }}
           >
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.text} />
           </ListItemButton>
         ))}
       </List>
-    </Drawer>
+    </>
+  );
+
+  return (
+    <Box
+      component="nav"
+      sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+    >
+      {/* Mobile drawer */}
+      {isMobile && (
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={onDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better mobile performance
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: drawerWidth 
+            },
+          }}
+        >
+          {drawerContent}
+        </Drawer>
+      )}
+      
+      {/* Desktop drawer */}
+      {!isMobile && (
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: drawerWidth 
+            },
+          }}
+          open
+        >
+          {drawerContent}
+        </Drawer>
+      )}
+    </Box>
   );
 };
 
