@@ -1,33 +1,45 @@
 import React, { useEffect, useState } from "react";
 import NoteCard from "../components/noteCard";
 import Masonry from "react-masonry-css";
+import { db } from "../firebaseConfig";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 
 const Notes = () => {
   const [notes, setNotes] = useState([]);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetch("http://localhost:8000/notes")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return res.json();
-      })
-      .then((data) => setNotes(data))
-      .catch((error) => setError(error.message));
-  }, []);
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const fetchNotes = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "note"));
+      const notesData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        title: doc.data().title, // Access title field
+        noteDetails: doc.data().noteDetails, // Access noteDetails field
+        category: doc.data().category, // Access category field
+      }));
+      setNotes(notesData);
+      setLoading(false);  // Set loading to false once data is fetched
+      console.log(notesData);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);  // Set loading to false even on error
+    }
+  };
+
+  fetchNotes();
+}, []);
 
   const handleDelete = async (id) => {
-    console.log("card ", id);
-    const response = await fetch(`http://localhost:8000/notes/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) {
-      throw new Error("Failed to delete note");
+    try {
+      await deleteDoc(doc(db, "notes", id));
+      const newNotes = notes.filter((note) => note.id !== id);
+      setNotes(newNotes);
+    } catch (error) {
+      setError("Failed to delete note");
     }
-    const newNotes = notes.filter((note) => note.id !== id);
-    setNotes(newNotes);
   };
 
   const breakPoints = {
@@ -45,9 +57,7 @@ const Notes = () => {
         columnClassName="my-masonry-grid_column"
       >
         {notes.map((note) => (
-          <div item key={note.id} xs={12} md={6} lg={4}>
-            <NoteCard data={note} onDelete={handleDelete} />
-          </div>
+          <NoteCard key={note.id} data={note} onDelete={handleDelete} />
         ))}
       </Masonry>
     </>

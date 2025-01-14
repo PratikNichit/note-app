@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   Card,
   CardHeader,
@@ -22,12 +21,14 @@ const NoteCard = ({ data, onDelete }) => {
     return categoryColors[category] || blue[500];
   };
 
+  const safeCategory = data.category || "Uncategorized"; // Fallback if category is missing
+
   return (
     <Card elevation={2}>
       <CardHeader
         avatar={
-          <Avatar sx={{ backgroundColor: applyBackgroundColor(data.category) }}>
-            {data.category[0].toUpperCase()}
+          <Avatar sx={{ backgroundColor: applyBackgroundColor(safeCategory) }}>
+            {safeCategory[0].toUpperCase()} {/* Ensure safeCategory is not undefined */}
           </Avatar>
         }
         action={
@@ -35,12 +36,12 @@ const NoteCard = ({ data, onDelete }) => {
             <Delete />
           </IconButton>
         }
-        title={data.title}
-        subheader={data.category}
+        title={data.title || "Untitled"} 
+        subheader={safeCategory}
       />
       <CardContent>
         <Typography variant="body1" color="textSecondary">
-          {data.details}
+          {data.noteDetails || "No details available"} {/* Use noteDetails */}
         </Typography>
       </CardContent>
     </Card>
@@ -48,3 +49,4 @@ const NoteCard = ({ data, onDelete }) => {
 };
 
 export default NoteCard;
+

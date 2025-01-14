@@ -19,7 +19,6 @@ const AppBarComponent = ({ onProfileClick }) => {
             Today is {format(new Date(), "do MMMM Y")}
           </Typography>
         </Box>
-
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography variant="body1">Pratik</Typography>
           <IconButton color="inherit" onClick={onProfileClick}>
