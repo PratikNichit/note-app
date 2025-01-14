@@ -49,9 +49,9 @@ const Create = () => {
 
     if (trimmedTitle && trimmedDetails) {
       try {
-        await addDoc(collection(db, "notes"), {
+        await addDoc(collection(db, "note"), {
           title: trimmedTitle,
-          details: trimmedDetails,
+          noteDetails: trimmedDetails,
           category,
           createdAt: new Date().toISOString(), // Add timestamp for better tracking
         });
@@ -74,7 +74,7 @@ const Create = () => {
   };
 
   return (
-    <Box maxWidth={isMobile ? "sm" : "md"} sx={{display: "flex", flexDirection: "column", margin: "auto"}}>
+    <Box maxWidth={isMobile ? "sm" : "md"}>
       <Typography
         variant="h6"
         color="textSecondary"

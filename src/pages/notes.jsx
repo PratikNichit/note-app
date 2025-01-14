@@ -33,11 +33,11 @@ const Notes = () => {
 
   const handleDelete = async (id) => {
     try {
-      await deleteDoc(doc(db, "notes", id));
-      const newNotes = notes.filter((note) => note.id !== id);
-      setNotes(newNotes);
+      await deleteDoc(doc(db, "notes", id)); 
+      const updatedNotes = notes.filter((note) => note.id !== id); 
+      setNotes(updatedNotes);
     } catch (error) {
-      setError("Failed to delete note");
+      console.error("Error deleting note:", error.message);
     }
   };
 
